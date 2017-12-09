@@ -14,6 +14,8 @@ extension CAPSPageMenu {
             switch (option) {
             case let .selectionIndicatorHeight(value):
                 configuration.selectionIndicatorHeight = value
+            case let .selectionIndicatorWidthScale(value):
+                configuration.selectionIndicatorWidthScale = value
             case let .menuItemSeparatorWidth(value):
                 configuration.menuItemSeparatorWidth = value
             case let .scrollMenuBackgroundColor(value):
@@ -239,8 +241,16 @@ extension CAPSPageMenu {
         var selectionIndicatorFrame : CGRect = CGRect()
         
         if configuration.useMenuLikeSegmentedControl {
-            let w = self.view.frame.width - (self.configuration.menuMargin * 2)
-            selectionIndicatorFrame = CGRect(x: 0.0, y: configuration.menuHeight - configuration.selectionIndicatorHeight, width: w / CGFloat(controllerArray.count), height: configuration.selectionIndicatorHeight)
+            var w = self.view.frame.width - (self.configuration.menuMargin * 2)
+            w = w / CGFloat(controllerArray.count)
+            let width = w * configuration.selectionIndicatorWidthScale
+            
+            let x = (w - width) * 0.5
+            
+            selectionIndicatorFrame = CGRect(x: x,
+                                             y: configuration.menuHeight - configuration.selectionIndicatorHeight,
+                                             width:width,
+                                             height: configuration.selectionIndicatorHeight)
         } else if configuration.menuItemWidthBasedOnTitleTextWidth {
             selectionIndicatorFrame = CGRect(x: configuration.menuMargin, y: configuration.menuHeight - configuration.selectionIndicatorHeight, width: menuItemWidths[0], height: configuration.selectionIndicatorHeight)
         } else {
