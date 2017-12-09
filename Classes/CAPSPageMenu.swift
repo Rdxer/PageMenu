@@ -170,9 +170,10 @@ extension CAPSPageMenu {
                 var selectionIndicatorWidth : CGFloat = self.selectionIndicatorView.frame.width
                 var selectionIndicatorX : CGFloat = 0.0
                 
-                if self.configuration.useMenuLikeSegmentedControl {
-                    selectionIndicatorX = CGFloat(pageIndex) * (self.view.frame.width / CGFloat(self.controllerArray.count))
-                    selectionIndicatorWidth = self.view.frame.width / CGFloat(self.controllerArray.count)
+                if self.configuration.useMenuLikeSegmentedControl {  // 如果是
+                    let w = self.view.frame.width - (self.configuration.menuMargin * 2)
+                    selectionIndicatorX = CGFloat(pageIndex) * (w / CGFloat(self.controllerArray.count))
+                    selectionIndicatorWidth = w / CGFloat(self.controllerArray.count)
                 } else if self.configuration.menuItemWidthBasedOnTitleTextWidth {
                     selectionIndicatorWidth = self.menuItemWidths[pageIndex]
                     selectionIndicatorX += self.configuration.menuMargin
@@ -249,19 +250,22 @@ extension CAPSPageMenu {
             
             //Resize menu items if using as segmented control
             if configuration.useMenuLikeSegmentedControl {
-                menuScrollView.contentSize = CGSize(width: self.view.frame.width, height: configuration.menuHeight)
+                
+                let w = self.view.frame.width - (self.configuration.menuMargin * 2)
+                
+                menuScrollView.contentSize = CGSize(width: w, height: configuration.menuHeight)
                 
                 // Resize selectionIndicator bar
-                let selectionIndicatorX : CGFloat = CGFloat(currentPageIndex) * (self.view.frame.width / CGFloat(self.controllerArray.count))
-                let selectionIndicatorWidth : CGFloat = self.view.frame.width / CGFloat(self.controllerArray.count)
+                let selectionIndicatorX : CGFloat = CGFloat(currentPageIndex) * (w / CGFloat(self.controllerArray.count))
+                let selectionIndicatorWidth : CGFloat = w / CGFloat(self.controllerArray.count)
                 selectionIndicatorView.frame =  CGRect(x: selectionIndicatorX, y: self.selectionIndicatorView.frame.origin.y, width: selectionIndicatorWidth, height: self.selectionIndicatorView.frame.height)
                 
                 // Resize menu items
                 var index : Int = 0
                 
                 for item : MenuItemView in menuItems as [MenuItemView] {
-                    item.frame = CGRect(x: self.view.frame.width / CGFloat(controllerArray.count) * CGFloat(index), y: 0.0, width: self.view.frame.width / CGFloat(controllerArray.count), height: configuration.menuHeight)
-                    item.titleLabel!.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.width / CGFloat(controllerArray.count), height: configuration.menuHeight)
+                    item.frame = CGRect(x: w / CGFloat(controllerArray.count) * CGFloat(index), y: 0.0, width: w / CGFloat(controllerArray.count), height: configuration.menuHeight)
+                    item.titleLabel!.frame = CGRect(x: 0.0, y: 0.0, width: w / CGFloat(controllerArray.count), height: configuration.menuHeight)
                     item.menuItemSeparator!.frame = CGRect(x: item.frame.width - (configuration.menuItemSeparatorWidth / 2), y: item.menuItemSeparator!.frame.origin.y, width: item.menuItemSeparator!.frame.width, height: item.menuItemSeparator!.frame.height)
                     
                     index += 1

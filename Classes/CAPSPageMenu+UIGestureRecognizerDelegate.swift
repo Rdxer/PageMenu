@@ -9,7 +9,7 @@
 import UIKit
 
 extension CAPSPageMenu : UIGestureRecognizerDelegate {
-    func handleMenuItemTap(_ gestureRecognizer : UITapGestureRecognizer) {
+    @objc func handleMenuItemTap(_ gestureRecognizer : UITapGestureRecognizer) {
         let tappedPoint : CGPoint = gestureRecognizer.location(in: menuScrollView)
         
         if tappedPoint.y < menuScrollView.frame.height {
@@ -18,7 +18,8 @@ extension CAPSPageMenu : UIGestureRecognizerDelegate {
             var itemIndex : Int = 0
             
             if configuration.useMenuLikeSegmentedControl {
-                itemIndex = Int(tappedPoint.x / (self.view.frame.width / CGFloat(controllerArray.count)))
+                let w = self.view.frame.width - (self.configuration.menuMargin * 2)
+                itemIndex = Int(tappedPoint.x / (w / CGFloat(controllerArray.count)))
             } else if configuration.menuItemWidthBasedOnTitleTextWidth {
                 // Base case being first item
                 var menuItemLeftBound : CGFloat = 0.0
